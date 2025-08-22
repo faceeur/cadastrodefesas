@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <title>Cadastro de Agendamento de Monografias</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { margin:0; font-family: "Segoe UI", Arial, sans-serif; background:#f4f6f8; color:#333; }
+    header { background:#1B5E20; color:white; padding:20px; text-align:center; }
+    header h1 { margin:0; font-size:22px; }
+    header h2 { margin:5px 0 0; font-weight:400; font-size:16px; }
+    main { max-width:600px; margin:30px auto; background:white; padding:20px; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
+    h3 { text-align:center; margin-top:0; color:#1B5E20; }
+    label { display:block; margin-top:12px; font-weight:600; }
+    input, textarea { width:100%; padding:10px; margin-top:6px; border:1px solid #ccc; border-radius:8px; font-size:14px; }
+    button { background:#1B5E20; color:white; padding:12px 18px; border:none; border-radius:8px; font-size:15px; margin-top:18px; cursor:pointer; width:100%; }
+    button:hover { background:#145A16; }
+    #msg { margin-top:15px; font-weight:600; text-align:center; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Universidade Rovuma</h1>
+    <h2>Faculdade de Ciências Económicas e Empresariais</h2>
+  </header>
+  <main>
+    <h3>Cadastro de Agendamento de Monografias</h3>
+    <form id="form">
+      <label>Nome do Estudante</label>
+      <input name="estudante" required>
+
+      <label>Tema</label>
+      <textarea name="tema" rows="2" required></textarea>
+
+      <label>Supervisor</label>
+      <input name="supervisor" required>
+
+      <label>Oponente</label>
+      <input name="oponente" required>
+
+      <label>Presidente</label>
+      <input name="presidente" required>
+
+      <label>Data</label>
+      <input type="date" name="data" required>
+
+      <label>Hora</label>
+      <input type="time" name="hora" required>
+
+      <button type="submit">Cadastrar</button>
+    </form>
+    <div id="msg"></div>
+  </main>
+
+  <script>
+    const SCRIPT_URL = "SUA_URL_DO_WEBAPP"; // substitua aqui
+
+    document.getElementById("form").addEventListener("submit", async e => {
+      e.preventDefault();
+      const dados = Object.fromEntries(new FormData(e.target));
+      const resp = await fetch(SCRIPT_URL, {
+        method: "POST",
+        body: JSON.stringify(dados),
+        headers: {"Content-Type": "application/json"}
+      });
+      const result = await resp.json();
+      document.getElementById("msg").textContent = result.status === "OK"
+        ? "✅ Defesa cadastrada com sucesso!"
+        : "❌ Erro ao cadastrar";
+      e.target.reset();
+    });
+  </script>
+</body>
+</html>
